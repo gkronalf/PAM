@@ -18,6 +18,7 @@ MACHINES = {
 
 Vagrant.configure("2") do |config|
   MACHINES.each do |boxname, boxconfig|
+    config.vm.provision :file, source: './files/', destination: '/home/vagrant/'
     # Отключаем сетевую папку
     config.vm.synced_folder ".", "/vagrant", disabled: true
     # Добавляем сетевой интерфейс
@@ -37,6 +38,13 @@ Vagrant.configure("2") do |config|
           sed -i 's/^PasswordAuthentication.*$/PasswordAuthentication yes/' /etc/ssh/sshd_config
           #Перезапуск службы SSHD
           systemctl restart sshd.service
+          useradd otusadm && useradd otus
+          echo "Otus2022!" | sudo passwd --stdin otusadm && echo "Otus2024!" | sudo passwd --stdin otus
+          groupadd admin
+          usermod otusadm -aG admin && usermod vagrant -aG admin && usermod root -aG admin
+          cp ./files/scripts/login.sh /usr/local/bin/login.sh
+          chmod +x /usr/local/bin/login.sh
+          echo "auth       required     pam_exec.so /usr/local/bin/login.sh" >> /etc/pam.d/sshd
   	  SHELL
     end
   end
