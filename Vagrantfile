@@ -39,7 +39,7 @@ Vagrant.configure("2") do |config|
           #Перезапуск службы SSHD
           systemctl restart sshd.service
           useradd otusadm && useradd otus
-          echo "Otus2022!" | sudo passwd --stdin otusadm && echo "Otus2024!" | sudo passwd --stdin otus
+          echo "Otus2024!" | sudo passwd --stdin otusadm && echo "Otus2024!" | sudo passwd --stdin otus
           groupadd admin
           usermod otusadm -aG admin && usermod vagrant -aG admin && usermod root -aG admin
           cp ./files/scripts/login.sh /usr/local/bin/login.sh
